@@ -1,0 +1,14 @@
+query GetAllCharacters{
+    characters(page: 1) {
+        results {
+            id
+            name
+            status
+            species
+            image
+            origin {
+                name
+            }
+        }
+    }
+}

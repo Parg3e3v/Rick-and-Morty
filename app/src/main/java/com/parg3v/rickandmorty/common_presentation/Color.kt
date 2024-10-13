@@ -1,4 +1,4 @@
-package com.parg3v.rickandmorty.ui.theme
+package com.parg3v.rickandmorty.common_presentation
 
 import androidx.compose.ui.graphics.Color
 

@@ -53,12 +53,6 @@ android {
 apollo {
     service("service") {
         packageName.set("com.parg3v.rickandmorty")
-
-        introspection {
-            endpointUrl.set("https://rickandmortyapi.com/graphql")
-
-            schemaFile.set(file("src/main/graphql/com/parg3v/rickandmorty/schema.sdl"))
-        }
     }
 }
 
