@@ -1,4 +1,4 @@
-package com.parg3v.rickandmorty.characters.presentation.screen.home
+package com.parg3v.rickandmorty.characters.presentation.screen.characters
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class HomeViewModel(
+class CharactersViewModel(
     private val getCharactersUseCase: GetAllCharactersUseCase,
 ) : ViewModel() {
 
@@ -18,7 +18,7 @@ class HomeViewModel(
 
     init {
         viewModelScope.launch(Dispatchers.Default) {
-            getCharactersUseCase.invoke().collect{ charactersList ->
+            getCharactersUseCase.invoke().collect { charactersList ->
                 _charactersState.value = charactersList
             }
         }

@@ -8,7 +8,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.parg3v.rickandmorty.characters.presentation.screen.home.HomeScreen
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.parg3v.rickandmorty.characters.presentation.navigation.CharactersDestination
+import com.parg3v.rickandmorty.characters.presentation.navigation.LocationsDestination
+import com.parg3v.rickandmorty.characters.presentation.screen.BottomBar
+import com.parg3v.rickandmorty.characters.presentation.screen.characters.CharactersScreen
+import com.parg3v.rickandmorty.characters.presentation.screen.locations.LocationsScreen
 import com.parg3v.rickandmorty.common_presentation.RickAndMortyTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,10 +24,25 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             RickAndMortyTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    HomeScreen(modifier = Modifier.padding(innerPadding))
+                val navController = rememberNavController()
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = { BottomBar(navController = navController) }) { innerPadding ->
+                    NavHost(
+                        modifier = Modifier.padding(innerPadding),
+                        navController = navController,
+                        startDestination = CharactersDestination
+                    ) {
+                        composable<CharactersDestination> {
+                            CharactersScreen()
+                        }
+                        composable<LocationsDestination> {
+                            LocationsScreen()
+                        }
+                    }
                 }
             }
         }
     }
 }
+
