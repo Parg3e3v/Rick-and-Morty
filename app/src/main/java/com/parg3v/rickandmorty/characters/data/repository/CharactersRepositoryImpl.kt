@@ -10,6 +10,7 @@ import com.parg3v.rickandmorty.characters.data.mapper.toLocationDomainModel
 import com.parg3v.rickandmorty.characters.domain.model.CharacterDomainModel
 import com.parg3v.rickandmorty.characters.domain.model.LocationDomainModel
 import com.parg3v.rickandmorty.characters.domain.repository.CharactersRepository
+import com.parg3v.rickandmorty.common_domain.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -18,21 +19,37 @@ import kotlinx.coroutines.flow.flowOn
 class CharactersRepositoryImpl(
     private val apolloClient: ApolloClient,
 ) : CharactersRepository {
-    override suspend fun getAllCharacters(): Flow<List<CharacterDomainModel>> = flow {
+    override suspend fun getAllCharacters(): Flow<Result<List<CharacterDomainModel>>> = flow {
         val response = apolloClient.query(GetAllCharactersQuery()).execute()
-        val data =
-            response.data?.characters?.results?.map { it.toCharacterDataModel() } ?: emptyList()
+        try {
+            val data = response.data?.characters?.results?.map { it.toCharacterDataModel() }
 
-        emit(data.map { it.toCharacterDomainModel() })
+            data?.let {
+                emit(Result.Success(data.map { it.toCharacterDomainModel() }))
+            } ?: run {
+                emit(Result.Failure("No data available"))
+            }
+
+        } catch (e: Exception) {
+            emit(Result.Failure(e.message))
+        }
 
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun getAllLocations(): Flow<List<LocationDomainModel>> = flow {
+    override suspend fun getAllLocations(): Flow<Result<List<LocationDomainModel>>> = flow {
         val response = apolloClient.query(GetAllLocationsQuery()).execute()
-        val data =
-            response.data?.locations?.results?.map { it.toLocationDataModel() } ?: emptyList()
+        try {
+            val data =
+                response.data?.locations?.results?.map { it.toLocationDataModel() }
 
-        emit(data.map { it.toLocationDomainModel() })
+            data?.let {
+                emit(Result.Success(data.map { it.toLocationDomainModel() }))
+            } ?: run {
+                emit(Result.Failure("No data available"))
+            }
+        } catch (e: Exception) {
+            emit(Result.Failure(e.message))
+        }
 
     }.flowOn(Dispatchers.IO)
 }

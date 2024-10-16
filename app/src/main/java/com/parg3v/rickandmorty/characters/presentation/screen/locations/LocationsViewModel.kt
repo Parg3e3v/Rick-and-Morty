@@ -8,12 +8,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import com.parg3v.rickandmorty.common_domain.Result
 
 class LocationsViewModel(
     private val getAllLocationsUseCase: GetAllLocationsUseCase,
 ) : ViewModel() {
 
-    private val _locationsState = MutableStateFlow<List<LocationDomainModel>>(emptyList())
+    private val _locationsState = MutableStateFlow<Result<List<LocationDomainModel>>>(Result.Loading)
     val locationsState = _locationsState.asStateFlow()
 
     init {

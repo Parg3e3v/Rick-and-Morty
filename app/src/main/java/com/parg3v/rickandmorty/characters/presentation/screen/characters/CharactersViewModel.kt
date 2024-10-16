@@ -8,18 +8,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import com.parg3v.rickandmorty.common_domain.Result
 
 class CharactersViewModel(
     private val getCharactersUseCase: GetAllCharactersUseCase,
 ) : ViewModel() {
 
-    private val _charactersState = MutableStateFlow<List<CharacterDomainModel>>(emptyList())
+    private val _charactersState = MutableStateFlow<Result<List<CharacterDomainModel>>>(Result.Loading)
     val charactersState = _charactersState.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.Default) {
-            getCharactersUseCase.invoke().collect { charactersList ->
-                _charactersState.value = charactersList
+            getCharactersUseCase.invoke().collect { result ->
+                _charactersState.value = result
             }
         }
     }
