@@ -17,12 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.parg3v.rickandmorty.R
 import com.parg3v.rickandmorty.characters.domain.model.CharacterDomainModel
 
 @Composable
@@ -45,7 +46,7 @@ fun CharacterItem(modifier: Modifier = Modifier, character: CharacterDomainModel
                     .size(100.dp)
                     .clip(RoundedCornerShape(16.dp)),
                 model = character.image,
-                placeholder = ColorPainter(Color.Gray),
+                placeholder = painterResource(R.drawable.placeholder),
                 contentDescription = null,
             )
             Column(
