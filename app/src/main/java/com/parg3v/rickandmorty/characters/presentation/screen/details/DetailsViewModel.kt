@@ -15,7 +15,7 @@ class DetailsViewModel(
 ) : ViewModel() {
 
     private val _character =
-        MutableStateFlow<Result<CharacterDomainModel?>>(Result.Failure("Character not found"))
+        MutableStateFlow<Result<CharacterDomainModel?>>(Result.Loading)
     val character = _character.asStateFlow()
 
     fun getCharacterDetails(characterId: String) {
