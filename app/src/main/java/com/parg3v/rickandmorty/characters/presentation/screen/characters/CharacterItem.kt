@@ -2,6 +2,7 @@ package com.parg3v.rickandmorty.characters.presentation.screen.characters
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,7 +28,11 @@ import com.parg3v.rickandmorty.R
 import com.parg3v.rickandmorty.characters.domain.model.CharacterDomainModel
 
 @Composable
-fun CharacterItem(modifier: Modifier = Modifier, character: CharacterDomainModel) {
+fun CharacterItem(
+    modifier: Modifier = Modifier,
+    character: CharacterDomainModel,
+    onItemClick: (id: String) -> Unit,
+) {
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -35,6 +40,9 @@ fun CharacterItem(modifier: Modifier = Modifier, character: CharacterDomainModel
                 MaterialTheme.colorScheme.background, RoundedCornerShape(15.dp, 0.dp, 15.dp, 0.dp)
             )
             .border(2.dp, Color.Gray, RoundedCornerShape(15.dp, 0.dp, 15.dp, 0.dp))
+            .clickable {
+                onItemClick(character.id)
+            }
             .padding(16.dp),
     ) {
         Row(
@@ -77,7 +85,11 @@ private fun CharacterPreview() {
             status = "Alive",
             species = "Human",
             image = "https://rickandmortyapi.com/api/character/avatar/3.jpeg",
-            origin = "Earth (Replacement Dimension)"
+            origin = "Earth (Replacement Dimension)",
+            location = "Earth (Replacement Dimension)",
+            type = "",
+            gender = "Female",
+            episode = emptyList()
         )
-    )
+    ){}
 }

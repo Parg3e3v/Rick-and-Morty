@@ -1,5 +1,8 @@
 package com.parg3v.rickandmorty.characters.presentation.screen
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Icon
@@ -13,47 +16,50 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.parg3v.rickandmorty.characters.presentation.navigation.TOP_LEVEL_ROUTES
+import com.parg3v.rickandmorty.characters.presentation.navigation.TopLevelRoutes
 
 @Composable
-fun BottomBar(modifier: Modifier = Modifier, navController: NavHostController = rememberNavController()) {
+fun BottomBar(
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController(),
+) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    NavigationBar(
-        containerColor = MaterialTheme.colorScheme.surfaceVariant, modifier = modifier
-    ) {
-        TOP_LEVEL_ROUTES.forEach { topLevelRoute ->
-            NavigationBarItem(icon = {
-                Icon(
-                    imageVector = ImageVector.vectorResource(topLevelRoute.icon), contentDescription = null,
-                    modifier = Modifier.size(AssistChipDefaults.IconSize)
-                )
-            },
-                label = {
-                    Text(stringResource(topLevelRoute.label))
-                },
-                selected = currentDestination?.hierarchy?.any { it.route == topLevelRoute.route::class.qualifiedName } == true,
-                onClick = {
-                    navController.navigate(topLevelRoute.route) {
-                        // Pop up to the start destination of the graph to
-                        // avoid building up a large stack of destinations
-                        // on the back stack as users select items
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        // Avoid multiple copies of the same destination when
-                        // reselecting the same item
-                        launchSingleTop = true
-                        // Restore state when reselecting a previously selected item
-                        restoreState = true
-                    }
-                })
+    val showBottomNav = TopLevelRoutes.entries.map { it.route::class }.any { route ->
+        currentDestination?.hierarchy?.any {
+            it.hasRoute(route)
+        } == true
+    }
+
+    AnimatedVisibility(visible = showBottomNav, modifier = modifier.fillMaxWidth()) {
+        NavigationBar(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            modifier = Modifier.background(MaterialTheme.colorScheme.surfaceVariant),
+        ) {
+            TopLevelRoutes.entries.map { bottomNavigationItem ->
+                val isSelected =
+                    currentDestination?.hierarchy?.any { it.hasRoute(bottomNavigationItem.route::class) } == true
+
+                if (currentDestination != null) {
+                    NavigationBarItem(selected = isSelected, icon = {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(bottomNavigationItem.icon),
+                            contentDescription = null,
+                            modifier = Modifier.size(AssistChipDefaults.IconSize)
+                        )
+                    }, label = {
+                        Text(stringResource(bottomNavigationItem.label))
+                    }, alwaysShowLabel = isSelected, onClick = {
+                        navController.navigate(bottomNavigationItem.route)
+                    })
+                }
+            }
         }
     }
 }

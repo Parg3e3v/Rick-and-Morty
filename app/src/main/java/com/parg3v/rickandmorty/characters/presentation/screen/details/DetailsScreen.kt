@@ -1,30 +1,31 @@
-package com.parg3v.rickandmorty.characters.presentation.screen.characters
+package com.parg3v.rickandmorty.characters.presentation.screen.details
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.parg3v.rickandmorty.common_domain.Result
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun CharactersScreen(
+fun DetailsScreen(
     modifier: Modifier = Modifier,
-    viewModel: CharactersViewModel = koinViewModel(),
-    onItemClick: (id: String) -> Unit,
+    characterId: String,
+    viewModel: DetailsViewModel = koinViewModel(),
 ) {
-    val characters = viewModel.charactersState.collectAsState()
+    LaunchedEffect(Unit) {
+        viewModel.getCharacterDetails(characterId)
+    }
 
+    val character = viewModel.character.collectAsState()
 
-    when (val result = characters.value) {
+    when (val result = character.value) {
         is Result.Failure -> {
             Box(modifier = Modifier.fillMaxSize()) {
                 Text("Error: ${result.message}", modifier = Modifier.align(Alignment.Center))
@@ -43,12 +44,8 @@ fun CharactersScreen(
 
         is Result.Success -> {
             LazyColumn(modifier = modifier) {
-                items(result.data, key = { it.id }) { character ->
-                    CharacterItem(
-                        modifier = Modifier.padding(8.dp),
-                        character = character,
-                        onItemClick = onItemClick
-                    )
+                item {
+                    Text(text = result.data.toString())
                 }
             }
         }

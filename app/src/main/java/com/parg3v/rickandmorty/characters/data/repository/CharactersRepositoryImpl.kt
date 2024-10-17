@@ -3,6 +3,7 @@ package com.parg3v.rickandmorty.characters.data.repository
 import com.apollographql.apollo.ApolloClient
 import com.parg3v.rickandmorty.GetAllCharactersQuery
 import com.parg3v.rickandmorty.GetAllLocationsQuery
+import com.parg3v.rickandmorty.GetCharacterByIdQuery
 import com.parg3v.rickandmorty.characters.data.mapper.toCharacterDataModel
 import com.parg3v.rickandmorty.characters.data.mapper.toCharacterDomainModel
 import com.parg3v.rickandmorty.characters.data.mapper.toLocationDataModel
@@ -52,4 +53,19 @@ class CharactersRepositoryImpl(
         }
 
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun getCharacterById(characterId: String): Flow<Result<CharacterDomainModel>> =
+        flow {
+            val response = apolloClient.query(GetCharacterByIdQuery(characterId)).execute()
+            try {
+                val data = response.data?.character?.toCharacterDataModel()
+                data?.let {
+                    emit(Result.Success(data.toCharacterDomainModel()))
+                } ?: run {
+                    emit(Result.Failure("No data available"))
+                }
+            } catch (e: Exception) {
+                emit(Result.Failure(e.message))
+            }
+        }
 }
