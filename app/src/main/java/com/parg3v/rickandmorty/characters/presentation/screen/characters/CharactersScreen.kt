@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +21,7 @@ import org.koin.androidx.compose.koinViewModel
 fun CharactersScreen(
     modifier: Modifier = Modifier,
     viewModel: CharactersViewModel = koinViewModel(),
+    lazyListState: LazyListState = rememberLazyListState(),
     onItemClick: (id: String) -> Unit,
 ) {
     val characters = viewModel.charactersState.collectAsState()
@@ -42,7 +45,7 @@ fun CharactersScreen(
         }
 
         is Result.Success -> {
-            LazyColumn(modifier = modifier) {
+            LazyColumn(modifier = modifier, state = lazyListState) {
                 items(result.data, key = { it.id }) { character ->
                     CharacterItem(
                         modifier = Modifier.padding(8.dp),

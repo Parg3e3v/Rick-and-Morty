@@ -19,7 +19,7 @@ class DetailsViewModel(
     val character = _character.asStateFlow()
 
     fun getCharacterDetails(characterId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Default) {
             getCharacterDetails.invoke(characterId).collect {
                 _character.value = it
             }

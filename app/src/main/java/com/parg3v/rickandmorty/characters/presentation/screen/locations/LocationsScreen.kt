@@ -3,7 +3,9 @@ package com.parg3v.rickandmorty.characters.presentation.screen.locations
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,7 +16,11 @@ import com.parg3v.rickandmorty.common_domain.Result
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun LocationsScreen(modifier: Modifier = Modifier, viewModel: LocationsViewModel = koinViewModel()) {
+fun LocationsScreen(
+    modifier: Modifier = Modifier,
+    viewModel: LocationsViewModel = koinViewModel(),
+    lazyListState: LazyListState = rememberLazyListState(),
+) {
     val locations = viewModel.locationsState.collectAsState()
 
     when (val result = locations.value) {
@@ -35,7 +41,7 @@ fun LocationsScreen(modifier: Modifier = Modifier, viewModel: LocationsViewModel
         }
 
         is Result.Success -> {
-            LazyColumn(modifier = modifier) {
+            LazyColumn(modifier = modifier, state = lazyListState) {
                 items(result.data, key = { it.id }) {
                     Text(text = it.name)
                 }
