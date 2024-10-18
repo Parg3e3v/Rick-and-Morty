@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.parg3v.rickandmorty.characters.presentation.navigation.AppNavigation
 import com.parg3v.rickandmorty.characters.presentation.screen.BottomBar
-import com.parg3v.rickandmorty.common_presentation.RickAndMortyTheme
+import com.parg3v.rickandmorty.common_presentation.util.RickAndMortyTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
