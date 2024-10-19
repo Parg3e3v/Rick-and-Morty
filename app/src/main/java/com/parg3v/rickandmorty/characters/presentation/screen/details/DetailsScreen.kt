@@ -294,7 +294,8 @@ private fun SuccessPreview() {
                             EpisodeDomainModel(
                                 name = "Pilot", episode = "S01E01"
                             ),
-                        )
+                        ),
+                        favourite = false
                     )
                 )
             )

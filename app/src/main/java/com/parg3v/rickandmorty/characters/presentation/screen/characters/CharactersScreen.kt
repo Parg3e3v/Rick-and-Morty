@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,7 +25,12 @@ fun CharactersScreen(
     onItemClick: (id: String) -> Unit,
 ) {
     val characters = viewModel.charactersState.collectAsState()
+    val localDBCharacters = viewModel.isCharacterFavourite.collectAsState()
+    val localDBStoreMessage = viewModel.localDBStoreMessage.collectAsState()
 
+    LaunchedEffect(Unit) {
+        viewModel.fetchLocalData()
+    }
 
     when (val result = characters.value) {
         is Result.Failure -> {
@@ -40,7 +46,10 @@ fun CharactersScreen(
                 modifier = modifier,
                 lazyListState = lazyListState,
                 characters = result.data,
-                onItemClick = onItemClick
+                onItemClick = onItemClick,
+                localDBCharacters = localDBCharacters.value,
+                localDBStoreMessage = localDBStoreMessage.value,
+                onFavouriteClick = viewModel::updateCharacterInLocalDB
             )
         }
     }
@@ -85,7 +94,8 @@ private fun SuccessPreview() {
                         origin = "Earth (C-137)",
                         location = "Citadel of Ricks",
                         image = "",
-                        episodes = emptyList()
+                        episodes = emptyList(),
+                        favourite = false
                     ),
                     CharacterDomainModel(
                         id = "2",
@@ -97,7 +107,8 @@ private fun SuccessPreview() {
                         origin = "Earth (C-137)",
                         location = "Citadel of Ricks",
                         image = "",
-                        episodes = emptyList()
+                        episodes = emptyList(),
+                        favourite = false
                     ),
                     CharacterDomainModel(
                         id = "3",
@@ -109,10 +120,14 @@ private fun SuccessPreview() {
                         origin = "Earth (C-137)",
                         location = "Citadel of Ricks",
                         image = "",
-                        episodes = emptyList()
+                        episodes = emptyList(),
+                        favourite = false
                     )
                 ),
-                onItemClick = {}
+                localDBCharacters = emptyMap(),
+                localDBStoreMessage = "",
+                onItemClick = {},
+                onFavouriteClick = { _, _ -> }
             )
         }
     }

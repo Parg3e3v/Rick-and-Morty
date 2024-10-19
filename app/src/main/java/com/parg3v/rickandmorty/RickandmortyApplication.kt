@@ -2,6 +2,7 @@ package com.parg3v.rickandmorty
 
 import android.app.Application
 import com.parg3v.rickandmorty.characters.data.di.charactersDataModule
+import com.parg3v.rickandmorty.characters.data.di.roomModule
 import com.parg3v.rickandmorty.characters.domain.di.charactersDomainModule
 import com.parg3v.rickandmorty.characters.presentation.di.charactersPresentationModule
 import com.parg3v.rickandmorty.common_data.di.apolloModule
@@ -21,7 +22,8 @@ class RickandmortyApplication : Application() {
                 apolloModule,
                 charactersDataModule,
                 charactersDomainModule,
-                charactersPresentationModule
+                charactersPresentationModule,
+                roomModule
             )
         }
 
