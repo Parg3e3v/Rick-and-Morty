@@ -11,6 +11,7 @@ data class CharacterDomainModel(
     val location: String,
     val image: String,
     val episodes: List<EpisodeDomainModel?>,
+    val favourite: Boolean
 )
 
 data class EpisodeDomainModel(

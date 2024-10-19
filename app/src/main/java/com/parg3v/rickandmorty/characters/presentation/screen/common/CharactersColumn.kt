@@ -16,12 +16,15 @@ fun CharactersColumn(
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
     characters: List<CharacterDomainModel>,
+    favouriteCharacters: Map<String, Boolean>,
     onItemClick: (id: String) -> Unit,
 ) {
     LazyColumn(modifier = modifier, state = lazyListState) {
         items(characters, key = { it.id }) { character ->
             CharacterItem(
-                modifier = Modifier.padding(8.dp), character = character, onItemClick = onItemClick
+                modifier = Modifier.padding(8.dp),
+                character = character.copy(favourite = character.id in favouriteCharacters),
+                onItemClick = onItemClick
             )
         }
     }

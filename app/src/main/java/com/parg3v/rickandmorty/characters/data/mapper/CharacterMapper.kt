@@ -22,7 +22,8 @@ fun GetAllCharactersQuery.Result?.toCharacterDataModel(): CharacterDataModel = C
     location = null,
     type = null,
     gender = null,
-    episodes = emptyList()
+    episodes = emptyList(),
+    favourite = false
 )
 
 
@@ -37,6 +38,7 @@ fun CharacterDataModel.toCharacterDomainModel(): CharacterDomainModel = Characte
     type = this.type ?: "Unknown",
     gender = this.gender ?: "Unknown",
     episodes = this.episodes.map { it.toEpisodeDomainModel() },
+    favourite = this.favourite
 )
 
 fun EpisodeDataModel?.toEpisodeDomainModel(): EpisodeDomainModel = EpisodeDomainModel(
@@ -72,7 +74,8 @@ fun GetCharacterByIdQuery.Character?.toCharacterDataModel(): CharacterDataModel 
     location = this?.location?.name,
     type = this?.type,
     gender = this?.gender,
-    episodes = this?.episode?.map { it?.toEpisodeDataModel() } ?: emptyList()
+    episodes = this?.episode?.map { it?.toEpisodeDataModel() } ?: emptyList(),
+    favourite = false
 )
 
 fun GetCharacterByIdQuery.Episode?.toEpisodeDataModel(): EpisodeDataModel = EpisodeDataModel(
@@ -92,5 +95,6 @@ fun GetResidentsQuery.Resident?.toCharacterDataModel(): CharacterDataModel = Cha
     location = null,
     type = null,
     gender = null,
-    episodes = emptyList()
+    episodes = emptyList(),
+    favourite = false
 )

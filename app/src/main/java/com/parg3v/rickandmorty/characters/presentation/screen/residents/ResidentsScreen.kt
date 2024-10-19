@@ -77,7 +77,10 @@ fun ResidentsComposable(
             style = MaterialTheme.typography.titleLarge
         )
         CharactersColumn(
-            modifier = modifier, characters = characters, onItemClick = onItemClick
+            modifier = modifier,
+            characters = characters,
+            favouriteCharacters = emptyMap(), // TODO: map
+            onItemClick = onItemClick
         )
     }
 
@@ -122,7 +125,8 @@ private fun SuccessPreview() {
                             origin = "Earth (C-137)",
                             location = "Citadel of Ricks",
                             image = "",
-                            episodes = emptyList()
+                            episodes = emptyList(),
+                            favourite = false
                         ), CharacterDomainModel(
                             id = "2",
                             name = "Morty Smith",
@@ -133,7 +137,8 @@ private fun SuccessPreview() {
                             origin = "Earth (C-137)",
                             location = "Citadel of Ricks",
                             image = "",
-                            episodes = emptyList()
+                            episodes = emptyList(),
+                            favourite = false
                         ), CharacterDomainModel(
                             id = "3",
                             name = "Summer Smith",
@@ -144,7 +149,8 @@ private fun SuccessPreview() {
                             origin = "Earth (C-137)",
                             location = "Citadel of Ricks",
                             image = "",
-                            episodes = emptyList()
+                            episodes = emptyList(),
+                            favourite = false
                         )
                     ),
                     locationName = "Citadel of Ricks",

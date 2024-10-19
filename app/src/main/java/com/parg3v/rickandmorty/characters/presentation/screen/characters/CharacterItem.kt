@@ -11,6 +11,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -65,6 +69,11 @@ fun CharacterItem(
                 Text(text = character.name)
                 Text(text = "${character.species} · ${character.status}")
             }
+
+            Icon(
+                imageVector = if (character.favourite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                contentDescription = null
+            )
         }
         Text(
             modifier = Modifier.align(Alignment.BottomEnd),
@@ -89,7 +98,8 @@ private fun CharacterPreview() {
             location = "Earth (Replacement Dimension)",
             type = "",
             gender = "Female",
-            episodes = emptyList()
+            episodes = emptyList(),
+            favourite = false
         )
-    ){}
+    ) {}
 }
