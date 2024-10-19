@@ -21,7 +21,7 @@ fun GetAllCharactersQuery.Result?.toCharacterDataModel(): CharacterDataModel = C
     location = null,
     type = null,
     gender = null,
-    episode = emptyList()
+    episodes = emptyList()
 )
 
 
@@ -35,7 +35,7 @@ fun CharacterDataModel.toCharacterDomainModel(): CharacterDomainModel = Characte
     location = this.location ?: "Unknown",
     type = this.type ?: "Unknown",
     gender = this.gender ?: "Unknown",
-    episode = this.episode.map { it.toEpisodeDomainModel() },
+    episodes = this.episodes.map { it.toEpisodeDomainModel() },
 )
 
 fun EpisodeDataModel?.toEpisodeDomainModel(): EpisodeDomainModel = EpisodeDomainModel(
@@ -71,7 +71,7 @@ fun GetCharacterByIdQuery.Character?.toCharacterDataModel(): CharacterDataModel 
     location = this?.location?.name,
     type = this?.type,
     gender = this?.gender,
-    episode = this?.episode?.map { it?.toEpisodeDataModel() } ?: emptyList()
+    episodes = this?.episode?.map { it?.toEpisodeDataModel() } ?: emptyList()
 )
 
 fun GetCharacterByIdQuery.Episode?.toEpisodeDataModel(): EpisodeDataModel = EpisodeDataModel(

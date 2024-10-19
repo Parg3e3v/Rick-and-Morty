@@ -104,7 +104,7 @@ private fun SuccessPreview() {
                             origin = "Earth (C-137)",
                             location = "Citadel of Ricks",
                             image = "",
-                            episode = emptyList()
+                            episodes = emptyList()
                         ),
                         CharacterDomainModel(
                             id = "2",
@@ -116,7 +116,7 @@ private fun SuccessPreview() {
                             origin = "Earth (C-137)",
                             location = "Citadel of Ricks",
                             image = "",
-                            episode = emptyList()
+                            episodes = emptyList()
                         ),
                         CharacterDomainModel(
                             id = "3",
@@ -128,7 +128,7 @@ private fun SuccessPreview() {
                             origin = "Earth (C-137)",
                             location = "Citadel of Ricks",
                             image = "",
-                            episode = emptyList()
+                            episodes = emptyList()
                         )
                     )
                 ),

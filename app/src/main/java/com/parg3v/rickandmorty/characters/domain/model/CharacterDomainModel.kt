@@ -10,7 +10,7 @@ data class CharacterDomainModel(
     val origin: String,
     val location: String,
     val image: String,
-    val episode: List<EpisodeDomainModel?>,
+    val episodes: List<EpisodeDomainModel?>,
 )
 
 data class EpisodeDomainModel(

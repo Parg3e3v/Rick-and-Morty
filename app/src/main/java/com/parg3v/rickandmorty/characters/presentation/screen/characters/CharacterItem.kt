@@ -89,7 +89,7 @@ private fun CharacterPreview() {
             location = "Earth (Replacement Dimension)",
             type = "",
             gender = "Female",
-            episode = emptyList()
+            episodes = emptyList()
         )
     ){}
 }

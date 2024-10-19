@@ -48,7 +48,9 @@ fun AppNavigation(
         composable<Destination.DetailsDestination> { backStackEntry ->
             val details: Destination.DetailsDestination = backStackEntry.toRoute()
 
-            DetailsScreen(characterId = details.characterId)
+            DetailsScreen(
+                characterId = details.characterId,
+                onButtonPress = { navController.popBackStack() })
         }
     }
 }
