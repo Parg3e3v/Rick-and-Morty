@@ -1,12 +1,12 @@
 package com.parg3v.rickandmorty.characters.presentation.screen.locations
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -23,6 +23,7 @@ fun LocationsScreen(
     modifier: Modifier = Modifier,
     viewModel: LocationsViewModel = koinViewModel(),
     lazyListState: LazyListState = rememberLazyListState(),
+    onClick: (id: String) -> Unit,
 ) {
     val locations = viewModel.locationsState.collectAsState()
 
@@ -36,7 +37,12 @@ fun LocationsScreen(
         }
 
         is Result.Success -> {
-            LocationsColumn(modifier = modifier, lazyListState = lazyListState, result = result)
+            LocationsColumn(
+                modifier = modifier,
+                lazyListState = lazyListState,
+                result = result,
+                onClick = onClick
+            )
         }
     }
 }
@@ -46,10 +52,17 @@ fun LocationsColumn(
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
     result: Result.Success<List<LocationDomainModel>>,
+    onClick: (id: String) -> Unit,
 ) {
-    LazyColumn(modifier = modifier, state = lazyListState) {
-        items(result.data, key = { it.id }) {
-            Text(text = it.name)
+    LazyColumn(modifier = modifier.fillMaxSize(), state = lazyListState) {
+        items(result.data, key = { it.id }) { location ->
+            LocationItem(
+                name = location.name,
+                type = location.type,
+                dimension = location.dimension,
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { onClick(location.id) }
+            )
         }
     }
 }
@@ -79,33 +92,36 @@ private fun LoadingPreview() {
 private fun SuccessPreview() {
     RickAndMortyTheme {
         Surface {
-            LocationsColumn(
-                modifier = Modifier.fillMaxSize(),
-                result = Result.Success(
-                    listOf(
-                        LocationDomainModel(
-                            id = "1", name = "Earth", type = "Planet", dimension = "Dimension C-137"
-                        ), LocationDomainModel(
-                            id = "2", name = "Abadango", type = "Cluster", dimension = "unknown"
-                        ), LocationDomainModel(
-                            id = "3",
-                            name = "Citadel of Ricks",
-                            type = "Space station",
-                            dimension = "unknown"
-                        ), LocationDomainModel(
-                            id = "4",
-                            name = "Worldender's lair",
-                            type = "Planet",
-                            dimension = "unknown"
-                        ), LocationDomainModel(
-                            id = "5",
-                            name = "Anatomy Park",
-                            type = "Microverse",
-                            dimension = "Dimension C-137"
-                        )
-                    )
+            val locations = listOf(
+                LocationDomainModel("1", "Earth (C-137)", "Planet", "Dimension C-137"),
+                LocationDomainModel("2", "Abadango", "Cluster", "unknown"),
+                LocationDomainModel("3", "Citadel of Ricks", "Space station", "unknown"),
+                LocationDomainModel("4", "Worldender's lair", "Planet", "unknown"),
+                LocationDomainModel("5", "Anatomy Park", "Microverse", "Dimension C-137"),
+                LocationDomainModel("6", "Interdimensional Cable", "TV", "unknown"),
+                LocationDomainModel("7", "Immortality Field Resort", "Resort", "unknown"),
+                LocationDomainModel(
+                    "8", "Post-Apocalyptic Earth", "Planet", "Post-Apocalyptic Dimension"
+                ),
+                LocationDomainModel("9", "Purge Planet", "Planet", "Replacement Dimension"),
+                LocationDomainModel("10", "Venzenulon 7", "Planet", "unknown"),
+                LocationDomainModel("11", "Bepis 9", "Planet", "unknown"),
+                LocationDomainModel("12", "Cronenberg Earth", "Planet", "Cronenberg Dimension"),
+                LocationDomainModel("13", "Nuptia 4", "Planet", "unknown"),
+                LocationDomainModel("14", "Giant's Town", "Fantasy town", "Fantasy Dimension"),
+                LocationDomainModel("15", "Bird World", "Planet", "unknown"),
+                LocationDomainModel("16", "St. Gloopy Noops Hospital", "Space station", "unknown"),
+                LocationDomainModel("17", "Earth (5-126)", "Planet", "Dimension 5-126"),
+                LocationDomainModel("18", "Mr. Goldenfold's dream", "Dream", "Dimension C-137"),
+                LocationDomainModel("19", "Gromflom Prime", "Planet", "Replacement Dimension"),
+                LocationDomainModel(
+                    "20", "Earth (Replacement Dimension)", "Planet", "Replacement Dimension"
                 )
             )
+            LocationsColumn(
+                modifier = Modifier.fillMaxSize(),
+                result = Result.Success(locations),
+                onClick = {})
         }
     }
 }

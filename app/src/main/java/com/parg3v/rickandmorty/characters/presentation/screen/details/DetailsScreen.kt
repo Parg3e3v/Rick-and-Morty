@@ -16,10 +16,8 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.AssistChipDefaults
-import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -40,6 +38,7 @@ import coil.compose.AsyncImage
 import com.parg3v.rickandmorty.R
 import com.parg3v.rickandmorty.characters.domain.model.CharacterDomainModel
 import com.parg3v.rickandmorty.characters.domain.model.EpisodeDomainModel
+import com.parg3v.rickandmorty.characters.presentation.screen.common.BackButton
 import com.parg3v.rickandmorty.common_domain.Result
 import com.parg3v.rickandmorty.common_presentation.common_error.ErrorComposable
 import com.parg3v.rickandmorty.common_presentation.common_loading.LoadingComposable
@@ -60,13 +59,7 @@ fun DetailsScreen(
     val character = viewModel.character.collectAsState()
 
     Box {
-        Button(
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(5.dp), onClick = onButtonPress
-        ) {
-            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
-        }
+        BackButton(onButtonPress = onButtonPress)
         when (val result = character.value) {
             is Result.Failure -> {
                 ErrorComposable(modifier = modifier, result = result)

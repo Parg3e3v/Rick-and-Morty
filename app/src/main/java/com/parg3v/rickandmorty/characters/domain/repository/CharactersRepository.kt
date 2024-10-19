@@ -9,4 +9,5 @@ interface CharactersRepository {
     suspend fun getAllCharacters(): Flow<Result<List<CharacterDomainModel>>>
     suspend fun getAllLocations(): Flow<Result<List<LocationDomainModel>>>
     suspend fun getCharacterById(characterId: String): Flow<Result<CharacterDomainModel>>
+    suspend fun getResidents(locationId: String): Flow<Result<Pair<String, List<CharacterDomainModel>>>>
 }

@@ -14,6 +14,9 @@ sealed interface Destination{
     @Serializable
     data class DetailsDestination(val characterId: String): Destination
 
+    @Serializable
+    data class ResidentsDestination(val locationId: String): Destination
+
 }
 
 enum class TopLevelRoutes(

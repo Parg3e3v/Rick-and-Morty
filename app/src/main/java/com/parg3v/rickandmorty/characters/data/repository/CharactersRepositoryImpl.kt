@@ -4,6 +4,7 @@ import com.apollographql.apollo.ApolloClient
 import com.parg3v.rickandmorty.GetAllCharactersQuery
 import com.parg3v.rickandmorty.GetAllLocationsQuery
 import com.parg3v.rickandmorty.GetCharacterByIdQuery
+import com.parg3v.rickandmorty.GetResidentsQuery
 import com.parg3v.rickandmorty.characters.data.mapper.toCharacterDataModel
 import com.parg3v.rickandmorty.characters.data.mapper.toCharacterDomainModel
 import com.parg3v.rickandmorty.characters.data.mapper.toLocationDataModel
@@ -61,6 +62,24 @@ class CharactersRepositoryImpl(
                 val data = response.data?.character?.toCharacterDataModel()
                 data?.let {
                     emit(Result.Success(data.toCharacterDomainModel()))
+                } ?: run {
+                    emit(Result.Failure("No data available"))
+                }
+            } catch (e: Exception) {
+                emit(Result.Failure(e.message))
+            }
+        }
+
+    override suspend fun getResidents(locationId: String): Flow<Result<Pair<String,List<CharacterDomainModel>>>> =
+        flow {
+            val response = apolloClient.query(GetResidentsQuery(locationId)).execute()
+            try {
+                val data = response.data?.location?.residents?.map { it.toCharacterDataModel() }
+
+                val name = response.data?.location?.name ?: throw IllegalStateException("No name available")
+
+                data?.let {
+                    emit(Result.Success(Pair(name,data.map { it.toCharacterDomainModel() } )))
                 } ?: run {
                     emit(Result.Failure("No data available"))
                 }

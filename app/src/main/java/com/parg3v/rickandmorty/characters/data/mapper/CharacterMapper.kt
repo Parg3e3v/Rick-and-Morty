@@ -3,6 +3,7 @@ package com.parg3v.rickandmorty.characters.data.mapper
 import com.parg3v.rickandmorty.GetAllCharactersQuery
 import com.parg3v.rickandmorty.GetAllLocationsQuery
 import com.parg3v.rickandmorty.GetCharacterByIdQuery
+import com.parg3v.rickandmorty.GetResidentsQuery
 import com.parg3v.rickandmorty.characters.data.model.CharacterDataModel
 import com.parg3v.rickandmorty.characters.data.model.EpisodeDataModel
 import com.parg3v.rickandmorty.characters.data.model.LocationDataModel
@@ -77,4 +78,19 @@ fun GetCharacterByIdQuery.Character?.toCharacterDataModel(): CharacterDataModel 
 fun GetCharacterByIdQuery.Episode?.toEpisodeDataModel(): EpisodeDataModel = EpisodeDataModel(
     name = this?.name,
     episode = this?.episode
+)
+
+/*-------------------------------------------------------------------------------------------*/
+
+fun GetResidentsQuery.Resident?.toCharacterDataModel(): CharacterDataModel = CharacterDataModel(
+    id = this?.id,
+    name = this?.name,
+    status = this?.status,
+    species = this?.species,
+    image = this?.image,
+    origin = this?.origin?.name,
+    location = null,
+    type = null,
+    gender = null,
+    episodes = emptyList()
 )
