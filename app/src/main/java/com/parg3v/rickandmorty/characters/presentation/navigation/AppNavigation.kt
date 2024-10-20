@@ -29,6 +29,7 @@ fun AppNavigation(
         navController = navController,
         startDestination = Destination.CharactersDestination
     ) {
+
         composable<Destination.CharactersDestination> {
             CharactersScreen(lazyListState = lazyListState) { id ->
                 navController.navigate(Destination.DetailsDestination(id))
@@ -60,7 +61,11 @@ fun AppNavigation(
             if (residents.locationId.isNotBlank()) {
 
                 ResidentsScreen(locationId = residents.locationId, onButtonPress = {
-                    navController.popBackStack()
+                    navController.navigate(Destination.LocationsDestination) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                    }
                 }) { id ->
                     navController.navigate(Destination.DetailsDestination(id))
                 }

@@ -10,4 +10,10 @@ interface CharactersRepository {
     suspend fun getAllLocations(): Flow<Result<List<LocationDomainModel>>>
     suspend fun getCharacterById(characterId: String): Flow<Result<CharacterDomainModel>>
     suspend fun getResidents(locationId: String): Flow<Result<Pair<String, List<CharacterDomainModel>>>>
+
+    suspend fun getCharactersFromLocalDb(): Flow<Result<Map<String, CharacterDomainModel>>>
+    suspend fun updateCharacterInLocalDB(
+        id: String,
+        character: CharacterDomainModel,
+    ): Flow<Result<CharacterDomainModel>>
 }

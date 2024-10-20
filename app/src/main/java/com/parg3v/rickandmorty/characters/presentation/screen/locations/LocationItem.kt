@@ -9,13 +9,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.parg3v.rickandmorty.common_presentation.util.LocationTypeColors
+import com.parg3v.rickandmorty.common_presentation.util.RickAndMortyTheme
 
 @Composable
 fun LocationItem(
@@ -44,6 +47,21 @@ fun LocationItem(
             )
             Text(text = "Type: $type", style = MaterialTheme.typography.bodyMedium)
             Text(text = "Dimension: $dimension", style = MaterialTheme.typography.bodySmall)
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun LocationItemPreview() {
+    RickAndMortyTheme {
+        Surface {
+            LocationItem(
+                name = "Earth (C-137)",
+                type = "Planet",
+                dimension = "Dimension C-137",
+                onClick = {}
+            )
         }
     }
 }

@@ -32,9 +32,12 @@ fun ResidentsScreen(
     onItemClick: (String) -> Unit,
 ) {
     val characters = viewModel.charactersState.collectAsState()
+    val localDBCharacters = viewModel.isCharacterFavourite.collectAsState()
+    val localDBStoreMessage = viewModel.localDBStoreMessage.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.getResidents(locationId)
+        viewModel.fetchLocalData()
     }
     Column {
         BackButton(onButtonPress = onButtonPress)
@@ -52,7 +55,10 @@ fun ResidentsScreen(
                     modifier = modifier,
                     characters = result.data.second,
                     locationName = result.data.first,
-                    onItemClick = onItemClick
+                    localDBCharacters = localDBCharacters.value,
+                    localDBStoreMessage = localDBStoreMessage.value,
+                    onItemClick = onItemClick,
+                    onFavouriteClick = viewModel::updateCharacterInLocalDB,
                 )
             }
         }
@@ -65,8 +71,12 @@ fun ResidentsComposable(
     modifier: Modifier = Modifier,
     characters: List<CharacterDomainModel>,
     locationName: String,
+    localDBCharacters: Map<String, CharacterDomainModel>,
+    localDBStoreMessage: String,
     onItemClick: (String) -> Unit,
+    onFavouriteClick: (id: String, character: CharacterDomainModel) -> Unit,
 ) {
+
     Column {
         Text(
             modifier = Modifier
@@ -77,7 +87,12 @@ fun ResidentsComposable(
             style = MaterialTheme.typography.titleLarge
         )
         CharactersColumn(
-            modifier = modifier, characters = characters, onItemClick = onItemClick
+            modifier = modifier,
+            characters = characters,
+            localDBCharacters = localDBCharacters,
+            localDBStoreMessage = localDBStoreMessage,
+            onFavouriteClick = onFavouriteClick,
+            onItemClick = onItemClick
         )
     }
 
@@ -110,7 +125,8 @@ private fun SuccessPreview() {
         Surface {
             Column {
                 BackButton(onButtonPress = {})
-                ResidentsComposable(modifier = Modifier.fillMaxSize(),
+                ResidentsComposable(
+                    modifier = Modifier.fillMaxSize(),
                     characters = listOf(
                         CharacterDomainModel(
                             id = "1",
@@ -122,7 +138,8 @@ private fun SuccessPreview() {
                             origin = "Earth (C-137)",
                             location = "Citadel of Ricks",
                             image = "",
-                            episodes = emptyList()
+                            episodes = emptyList(),
+                            favourite = false
                         ), CharacterDomainModel(
                             id = "2",
                             name = "Morty Smith",
@@ -133,7 +150,8 @@ private fun SuccessPreview() {
                             origin = "Earth (C-137)",
                             location = "Citadel of Ricks",
                             image = "",
-                            episodes = emptyList()
+                            episodes = emptyList(),
+                            favourite = false
                         ), CharacterDomainModel(
                             id = "3",
                             name = "Summer Smith",
@@ -144,11 +162,16 @@ private fun SuccessPreview() {
                             origin = "Earth (C-137)",
                             location = "Citadel of Ricks",
                             image = "",
-                            episodes = emptyList()
+                            episodes = emptyList(),
+                            favourite = false
                         )
                     ),
                     locationName = "Citadel of Ricks",
-                    onItemClick = {})
+                    onItemClick = {},
+                    onFavouriteClick = { _, _ -> },
+                    localDBCharacters = emptyMap(),
+                    localDBStoreMessage = ""
+                )
             }
         }
     }

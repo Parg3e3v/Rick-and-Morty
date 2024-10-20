@@ -1,5 +1,7 @@
 package com.parg3v.rickandmorty.characters.presentation.screen
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import com.parg3v.rickandmorty.characters.presentation.navigation.TopLevelRoutes
 import kotlinx.coroutines.launch
 
+@SuppressLint("RestrictedApi")
 @Composable
 fun BottomBar(
     modifier: Modifier = Modifier,
@@ -81,14 +84,34 @@ fun BottomBar(
                                 // Pop up to the start destination of the graph to
                                 // avoid building up a large stack of destinations
                                 // on the back stack as users select items
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
+                                try {
+
+                                    /*  Trying to check weather the graph has a start destination ID to pop up or not  */
+                                    navController.getBackStackEntry(navController.graph.findStartDestination().id)
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    // Restore state when reselecting a previously selected item
+                                    restoreState = true
+                                } catch (e: Exception) {
+                                    Log.e(
+                                        "NavigationError",
+                                        "An error occurred, navigating to a new page: ${e.message}"
+                                    )
                                 }
+
+//                                navController.addOnDestinationChangedListener { controller, _, _ ->
+//                                    val routes = controller
+//                                        .currentBackStack.value
+//                                        .map { it.destination.route }
+//                                        .joinToString(", ")
+//
+//                                    Log.d("BackStackLog", "BackStack: $routes")
+//                                }
+
                                 // Avoid multiple copies of the same destination when
                                 // reselecting the same item
                                 launchSingleTop = true
-                                // Restore state when reselecting a previously selected item
-                                restoreState = true
                             }
                         }
 
