@@ -1,6 +1,5 @@
 package com.parg3v.rickandmorty.characters.presentation.screen
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -30,7 +29,6 @@ import androidx.navigation.compose.rememberNavController
 import com.parg3v.rickandmorty.characters.presentation.navigation.TopLevelRoutes
 import kotlinx.coroutines.launch
 
-@SuppressLint("RestrictedApi")
 @Composable
 fun BottomBar(
     modifier: Modifier = Modifier,
