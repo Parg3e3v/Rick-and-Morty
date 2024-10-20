@@ -25,10 +25,11 @@ fun CharactersScreen(
     onItemClick: (id: String) -> Unit,
 ) {
     val characters = viewModel.charactersState.collectAsState()
-    val isCharacterFavourite = viewModel.isCharacterFavourite.collectAsState()
+    val localDBCharacters = viewModel.isCharacterFavourite.collectAsState()
+    val localDBStoreMessage = viewModel.localDBStoreMessage.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.fetchLocalData("test")
+        viewModel.fetchLocalData()
     }
 
     when (val result = characters.value) {
@@ -46,7 +47,9 @@ fun CharactersScreen(
                 lazyListState = lazyListState,
                 characters = result.data,
                 onItemClick = onItemClick,
-                favouriteCharacters = isCharacterFavourite.value
+                localDBCharacters = localDBCharacters.value,
+                localDBStoreMessage = localDBStoreMessage.value,
+                onFavouriteClick = viewModel::updateCharacterInLocalDB
             )
         }
     }
@@ -121,8 +124,10 @@ private fun SuccessPreview() {
                         favourite = false
                     )
                 ),
-                favouriteCharacters = emptyMap(),
-                onItemClick = {}
+                localDBCharacters = emptyMap(),
+                localDBStoreMessage = "",
+                onItemClick = {},
+                onFavouriteClick = { _, _ -> }
             )
         }
     }

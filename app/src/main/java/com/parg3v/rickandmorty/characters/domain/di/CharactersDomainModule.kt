@@ -10,6 +10,8 @@ import com.parg3v.rickandmorty.characters.domain.usecase.GetCharacterDetailsUseC
 import com.parg3v.rickandmorty.characters.domain.usecase.GetCharacterDetailsUseCaseImpl
 import com.parg3v.rickandmorty.characters.domain.usecase.GetResidentsUseCase
 import com.parg3v.rickandmorty.characters.domain.usecase.GetResidentsUseCaseImpl
+import com.parg3v.rickandmorty.characters.domain.usecase.UpdateCharacterInLocalDBUseCase
+import com.parg3v.rickandmorty.characters.domain.usecase.UpdateCharacterInLocalDBUseCaseImpl
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
@@ -20,4 +22,5 @@ val charactersDomainModule = module {
     factoryOf(::GetCharacterDetailsUseCaseImpl) { bind<GetCharacterDetailsUseCase>() }
     factoryOf(::GetResidentsUseCaseImpl) { bind<GetResidentsUseCase>() }
     factoryOf(::FetchLocalDataUseCaseImpl) { bind<FetchLocalDataUseCase>() }
+    factoryOf(::UpdateCharacterInLocalDBUseCaseImpl) { bind<UpdateCharacterInLocalDBUseCase>() }
 }

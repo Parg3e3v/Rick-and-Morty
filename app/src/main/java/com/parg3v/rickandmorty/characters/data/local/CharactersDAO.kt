@@ -1,14 +1,16 @@
 package com.parg3v.rickandmorty.characters.data.local
 
 import androidx.room.Dao
+import androidx.room.MapColumn
 import androidx.room.Query
+import androidx.room.Upsert
 
 @Dao
 interface CharacterDao {
 
-    @Query("SELECT * FROM character WHERE id = :id")
-    suspend fun getCharacterById(id: String): CharacterEntity?
+    @Query("SELECT * FROM character")
+    suspend fun getCharactersFromLocalDB(): Map<@MapColumn(columnName = "id") String, CharacterEntity>
 
-    @Query("UPDATE character SET favourite = :isFavourite WHERE id = :id")
-    suspend fun updateCharacterFavourite(id: String, isFavourite: Boolean)
+    @Upsert
+    suspend fun updateCharacter(character: CharacterEntity)
 }

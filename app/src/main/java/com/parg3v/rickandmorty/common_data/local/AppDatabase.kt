@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import com.parg3v.rickandmorty.characters.data.local.CharacterDao
 import com.parg3v.rickandmorty.characters.data.local.CharacterEntity
 
-@Database(entities = [CharacterEntity::class], version = 1)
+@Database(entities = [CharacterEntity::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun characterDao(): CharacterDao

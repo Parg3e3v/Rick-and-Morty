@@ -6,9 +6,9 @@ import com.parg3v.rickandmorty.GetAllLocationsQuery
 import com.parg3v.rickandmorty.GetCharacterByIdQuery
 import com.parg3v.rickandmorty.GetResidentsQuery
 import com.parg3v.rickandmorty.characters.data.local.CharacterDao
-import com.parg3v.rickandmorty.characters.data.local.CharacterEntity
 import com.parg3v.rickandmorty.characters.data.mapper.toCharacterDataModel
 import com.parg3v.rickandmorty.characters.data.mapper.toCharacterDomainModel
+import com.parg3v.rickandmorty.characters.data.mapper.toCharacterEntity
 import com.parg3v.rickandmorty.characters.data.mapper.toLocationDataModel
 import com.parg3v.rickandmorty.characters.data.mapper.toLocationDomainModel
 import com.parg3v.rickandmorty.characters.domain.model.CharacterDomainModel
@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.flowOn
 
 class CharactersRepositoryImpl(
     private val apolloClient: ApolloClient,
-    private val characterDao: CharacterDao
+    private val characterDao: CharacterDao,
 ) : CharactersRepository {
     override suspend fun getAllCharacters(): Flow<Result<List<CharacterDomainModel>>> = flow {
         val response = apolloClient.query(GetAllCharactersQuery()).execute()
@@ -70,7 +70,7 @@ class CharactersRepositoryImpl(
             } catch (e: Exception) {
                 emit(Result.Failure(e.message))
             }
-        }
+        }.flowOn(Dispatchers.IO)
 
     override suspend fun getResidents(locationId: String): Flow<Result<Pair<String, List<CharacterDomainModel>>>> =
         flow {
@@ -89,19 +89,30 @@ class CharactersRepositoryImpl(
             } catch (e: Exception) {
                 emit(Result.Failure(e.message))
             }
-        }
+        }.flowOn(Dispatchers.IO)
 
-    override suspend fun getCharacterFromLocalDb(characterId: String): Flow<Result<CharacterEntity?>> =
+    override suspend fun getCharactersFromLocalDb(): Flow<Result<Map<String, CharacterDomainModel>>> =
         flow {
-            val data = characterDao.getCharacterById(characterId)
-            data?.let {
-                emit(Result.Success(data))
-            } ?: run {
-                emit(Result.Failure("No data available"))
+            val data = characterDao.getCharactersFromLocalDB()
+            val map = data.mapValues { it.value.toCharacterDataModel() }
+            try {
+                emit(Result.Success(map.mapValues { it.value.toCharacterDomainModel() }))
+            } catch (e: Exception) {
+                emit(Result.Failure(e.message))
             }
-        }
+        }.flowOn(Dispatchers.IO)
 
-    override suspend fun updateCharacterFavourite(characterId: String, isFavourite: Boolean) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun updateCharacterInLocalDB(
+        id: String,
+        character: CharacterDomainModel,
+    ): Flow<Result<CharacterDomainModel>> = flow {
+        try {
+            characterDao.updateCharacter(
+                character.toCharacterDataModel().toCharacterEntity(id)
+            )
+            emit(Result.Success(character))
+        } catch (e: Exception) {
+            emit(Result.Failure(e.message))
+        }
+    }.flowOn(Dispatchers.IO)
 }
